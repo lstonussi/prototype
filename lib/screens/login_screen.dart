@@ -67,7 +67,8 @@ class _LoginScreenState extends State<LoginScreen> {
         child: ListView(
           padding: EdgeInsets.all(16),
           children: <Widget>[
-            Image.network('https://www.planin.com.br/img/logo.png'),
+            //Image.network('https://www.planin.com.br/img/logo.png'),
+            Image.asset('lib/assets/logo.png'),
             TextFormField(
               decoration: InputDecoration(hintText: 'Usuário'),
               keyboardType: TextInputType.text,
