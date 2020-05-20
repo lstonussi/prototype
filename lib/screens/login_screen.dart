@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:salesforce/controller/login_controller.dart';
-import 'package:salesforce/model/login_repository.dart';
+import 'package:salesforce/model/repository/login_repository.dart';
 import 'package:salesforce/screens/menu_screen.dart';
 
 import 'menu_screen.dart';

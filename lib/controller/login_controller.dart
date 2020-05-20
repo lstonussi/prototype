@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:salesforce/model/login_repository.dart';
+import 'package:salesforce/model/repository/login_repository.dart';
 import 'package:salesforce/model/user_model.dart';
 
 class LoginController {
