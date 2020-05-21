@@ -2,19 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:salesforce/providers/db_provider.dart';
-import 'package:salesforce/providers/employee_provider.dart';
+import 'package:salesforce/providers/user_provider.dart';
 import 'package:salesforce/screens/avatar_screen.dart';
 
-class MenuScreen extends StatefulWidget {
-  MenuScreen({Key key, this.title}) : super(key: key);
+class UsuarioScreen extends StatefulWidget {
+  UsuarioScreen({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<StatefulWidget> createState() => new _MenuScreenState();
+  State<StatefulWidget> createState() => new _UsuarioScreenState();
 }
 
-class _MenuScreenState extends State<MenuScreen> {
+class _UsuarioScreenState extends State<UsuarioScreen> {
   var isLoading = false;
 
   Future<bool> _onWillPop() async {
@@ -88,9 +88,8 @@ class _MenuScreenState extends State<MenuScreen> {
       isLoading = true;
     });
 
-    var apiProvider = EmployeeApiProvider();
-    await apiProvider.getAllEmployees();
-    //await apiProvider.getAllDocs();
+    var apiProvider = UsuarioApiProvider();
+    await apiProvider.getAllUsuarios();
     //await apiProvider.getAllProducts();
 
     // wait for 2 seconds to simulate loading of data
@@ -106,8 +105,8 @@ class _MenuScreenState extends State<MenuScreen> {
       isLoading = true;
     });
 
-    await DBProvider.db.deleteAllEmployees();
-    //await DBProvider.db.deleteAllDocs();
+    //await DBProvider.db.deleteAllEmployees();
+    await DBProvider.db.deleteAllUsuario();
     //await DBProvider.db.deleteAllProducts();
 
     // wait for 1 second to simulate loading of data
@@ -122,7 +121,7 @@ class _MenuScreenState extends State<MenuScreen> {
 
   _buildEmployeeListView() {
     return FutureBuilder(
-      future: DBProvider.db.getAllEmployees(),
+      future: DBProvider.db.getAllUsuario(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (!snapshot.hasData) {
           return Center(

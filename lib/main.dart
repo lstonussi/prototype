@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:salesforce/screens/login_screen.dart';
+import 'package:salesforce/screens/usuario_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,6 +15,6 @@ class MyApp extends StatelessWidget {
           primaryColor: Color.fromARGB(255, 0, 51, 102),
         ),
         debugShowCheckedModeBanner: false,
-        home: LoginScreen());
+        home: UsuarioScreen());
   }
 }

@@ -1,11 +1,31 @@
-class UserModel {
-  int codUser;
-  String cnpj;
-  String cpf;
-  String nome;
-  String senha;
-  bool cadastroMobile = true;
-  String precoMobile;
-  bool sabadoUtil;
-  bool habilitaPreco;
+import 'dart:convert';
+
+List<Usuario> usuarioFromJson(String str) =>
+    List<Usuario>.from(json.decode(str).map((x) => Usuario.fromJson(x)));
+
+String usuarioToJson(List<Usuario> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class Usuario {
+  String co_usuario;
+  String no_usuario;
+  String no_senha;
+
+  Usuario({
+    this.co_usuario,
+    this.no_usuario,
+    this.no_senha,
+  });
+
+  factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
+        co_usuario: json["co_usuario"],
+        no_usuario: json["no_usuario"],
+        no_senha: json["no_senha"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "co_usuario": co_usuario,
+        "no_usuario": no_usuario,
+        "no_senha": no_senha,
+      };
 }

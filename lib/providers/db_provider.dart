@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:salesforce/model/employee_model.dart';
+import 'package:salesforce/model/user_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DBProvider {
@@ -36,12 +37,11 @@ class DBProvider {
           'avatar TEXT'
           ')');
 
-      await db.execute('CREATE TABLE usuarios('
-          'id INTEGER PRIMARY KEY,'
+      await db.execute('CREATE TABLE usuario('
+          'codigo INTEGER PRIMARY KEY,'
           'nome varchar(100),'
           'senha varchar(50),'
-          'cnpj varchar(14),'
-          'cpf varchar(11)'
+          'intermediario integer'
           ')');
     });
   }
@@ -55,10 +55,27 @@ class DBProvider {
     return res;
   }
 
+  // Insert usuario on database
+  createUsuario(Usuario newUsuario) async {
+    await deleteAllUsuario();
+    final db = await database;
+    final res = await db.insert('Usuario', newUsuario.toJson());
+
+    return res;
+  }
+
   // Delete all employees
   Future<int> deleteAllEmployees() async {
     final db = await database;
     final res = await db.rawDelete('DELETE FROM Employee');
+
+    return res;
+  }
+
+  // Delete all usuario
+  Future<int> deleteAllUsuario() async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM Usuario');
 
     return res;
   }
@@ -69,6 +86,16 @@ class DBProvider {
 
     List<Employee> list =
         res.isNotEmpty ? res.map((c) => Employee.fromJson(c)).toList() : [];
+
+    return list;
+  }
+
+  Future<List<Usuario>> getAllUsuario() async {
+    final db = await database;
+    final res = await db.rawQuery("SELECT * FROM USUARIO");
+
+    List<Usuario> list =
+        res.isNotEmpty ? res.map((c) => Usuario.fromJson(c)).toList() : [];
 
     return list;
   }

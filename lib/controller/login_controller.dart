@@ -4,13 +4,13 @@ import 'package:salesforce/model/user_model.dart';
 
 class LoginController {
   final formKey = GlobalKey<FormState>();
-  UserModel user = UserModel();
+  Usuario user = Usuario();
 
   final LoginRepository repository;
   LoginController(this.repository);
 
-  userUsuario(String value) => user.nome = value;
-  userSenha(String value) => user.senha = value;
+  userUsuario(String value) => user.no_usuario = value;
+  userSenha(String value) => user.no_senha = value;
 
   Future<bool> login() async {
     if (!formKey.currentState.validate()) {
