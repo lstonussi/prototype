@@ -5,10 +5,9 @@ import 'db_provider.dart';
 
 class UsuarioApiProvider {
   Future<List<Usuario>> getAllUsuarios() async {
-    var url = "http://demo8161595.mockable.io/employee";
-
+    var url = "https://my-json-server.typicode.com/lstonussi/fakeapi/usuarios";
     Response response = await Dio().get(url);
-    print(url);
+
     return (response.data as List).map((usuario) {
       print('Inserting $usuario');
       DBProvider.db.createUsuario(Usuario.fromJson(usuario));

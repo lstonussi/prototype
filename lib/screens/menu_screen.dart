@@ -90,8 +90,6 @@ class _MenuScreenState extends State<MenuScreen> {
 
     var apiProvider = EmployeeApiProvider();
     await apiProvider.getAllEmployees();
-    //await apiProvider.getAllDocs();
-    //await apiProvider.getAllProducts();
 
     // wait for 2 seconds to simulate loading of data
     await Future.delayed(const Duration(seconds: 2));
@@ -105,10 +103,7 @@ class _MenuScreenState extends State<MenuScreen> {
     setState(() {
       isLoading = true;
     });
-
     await DBProvider.db.deleteAllEmployees();
-    //await DBProvider.db.deleteAllDocs();
-    //await DBProvider.db.deleteAllProducts();
 
     // wait for 1 second to simulate loading of data
     await Future.delayed(const Duration(seconds: 1));

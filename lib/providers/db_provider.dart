@@ -29,6 +29,7 @@ class DBProvider {
 
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
+      print('Criando tabelas');
       await db.execute('CREATE TABLE Employee('
           'id INTEGER PRIMARY KEY,'
           'email TEXT,'
@@ -38,10 +39,9 @@ class DBProvider {
           ')');
 
       await db.execute('CREATE TABLE usuario('
-          'codigo INTEGER PRIMARY KEY,'
-          'nome varchar(100),'
-          'senha varchar(50),'
-          'intermediario integer'
+          'co_usuario INTEGER PRIMARY KEY,'
+          'no_usuario varchar(100),'
+          'no_senha varchar(50)'
           ')');
     });
   }
@@ -57,15 +57,15 @@ class DBProvider {
 
   // Insert usuario on database
   createUsuario(Usuario newUsuario) async {
-    await deleteAllUsuario();
     final db = await database;
-    final res = await db.insert('Usuario', newUsuario.toJson());
+    final res = await db.insert('usuario', newUsuario.toJson());
 
     return res;
   }
 
   // Delete all employees
   Future<int> deleteAllEmployees() async {
+    print('Deletando Employees');
     final db = await database;
     final res = await db.rawDelete('DELETE FROM Employee');
 
@@ -74,13 +74,15 @@ class DBProvider {
 
   // Delete all usuario
   Future<int> deleteAllUsuario() async {
+    print('Deletando Usuarios');
     final db = await database;
-    final res = await db.rawDelete('DELETE FROM Usuario');
+    final res = await db.rawDelete('DELETE FROM usuario');
 
     return res;
   }
 
   Future<List<Employee>> getAllEmployees() async {
+    print('Get EMPLOYEE');
     final db = await database;
     final res = await db.rawQuery("SELECT * FROM EMPLOYEE");
 
@@ -91,8 +93,9 @@ class DBProvider {
   }
 
   Future<List<Usuario>> getAllUsuario() async {
+    print('Get USUARIO');
     final db = await database;
-    final res = await db.rawQuery("SELECT * FROM USUARIO");
+    final res = await db.rawQuery("SELECT * FROM USUARIO;");
 
     List<Usuario> list =
         res.isNotEmpty ? res.map((c) => Usuario.fromJson(c)).toList() : [];

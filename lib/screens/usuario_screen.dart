@@ -73,8 +73,17 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
               ],
             ),
             body: isLoading
-                ? Center(
-                    child: CircularProgressIndicator(),
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Text('Carregando dados...'),
+                    ],
                   )
                 : _buildEmployeeListView(),
           ),
@@ -90,10 +99,9 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
 
     var apiProvider = UsuarioApiProvider();
     await apiProvider.getAllUsuarios();
-    //await apiProvider.getAllProducts();
 
     // wait for 2 seconds to simulate loading of data
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 3));
 
     setState(() {
       isLoading = false;
@@ -104,19 +112,16 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     setState(() {
       isLoading = true;
     });
-
-    //await DBProvider.db.deleteAllEmployees();
     await DBProvider.db.deleteAllUsuario();
-    //await DBProvider.db.deleteAllProducts();
 
     // wait for 1 second to simulate loading of data
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 2));
 
     setState(() {
       isLoading = false;
     });
 
-    print('All employees deleted');
+    print('All usuarios deleted');
   }
 
   _buildEmployeeListView() {
@@ -124,8 +129,17 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
       future: DBProvider.db.getAllUsuario(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Center(
+                child: CircularProgressIndicator(),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Text('Carregando dados...'),
+            ],
           );
         } else {
           return ListView.separated(
@@ -139,9 +153,8 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                   "${index + 1}",
                   style: TextStyle(fontSize: 20.0),
                 ),
-                title: Text(
-                    "Name: ${snapshot.data[index].firstName} ${snapshot.data[index].lastName} "),
-                subtitle: Text('EMAIL: ${snapshot.data[index].email}'),
+                title: Text("Name: ${snapshot.data[index].no_usuario} "),
+                subtitle: Text('EMAIL: ${snapshot.data[index].co_usuario}'),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
