@@ -95,7 +95,7 @@ class DBProvider {
   Future<List<Usuario>> getAllUsuario() async {
     print('Get USUARIO');
     final db = await database;
-    final res = await db.rawQuery("SELECT * FROM USUARIO;");
+    final res = await db.rawQuery("SELECT * FROM USUARIO");
 
     List<Usuario> list =
         res.isNotEmpty ? res.map((c) => Usuario.fromJson(c)).toList() : [];

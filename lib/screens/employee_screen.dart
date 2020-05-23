@@ -2,19 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:salesforce/providers/db_provider.dart';
-import 'package:salesforce/providers/user_provider.dart';
+import 'package:salesforce/providers/employee_provider.dart';
 import 'package:salesforce/screens/avatar_screen.dart';
 
-class UsuarioScreen extends StatefulWidget {
-  UsuarioScreen({Key key, this.title}) : super(key: key);
+class EmployeeScreen extends StatefulWidget {
+  EmployeeScreen({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<StatefulWidget> createState() => new _UsuarioScreenState();
+  State<StatefulWidget> createState() => new _EmployeeScreenState();
 }
 
-class _UsuarioScreenState extends State<UsuarioScreen> {
+class _EmployeeScreenState extends State<EmployeeScreen> {
   var isLoading = false;
 
   @override
@@ -45,17 +45,8 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
         ],
       ),
       body: isLoading
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Center(
-                  child: CircularProgressIndicator(),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Text('Carregando dados...'),
-              ],
+          ? Center(
+              child: CircularProgressIndicator(),
             )
           : _buildEmployeeListView(),
     );
@@ -66,11 +57,11 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
       isLoading = true;
     });
 
-    var apiProvider = UsuarioApiProvider();
-    await apiProvider.getAllUsuarios();
+    var apiProvider = EmployeeApiProvider();
+    await apiProvider.getAllEmployees();
 
     // wait for 2 seconds to simulate loading of data
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 2));
 
     setState(() {
       isLoading = false;
@@ -81,34 +72,25 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     setState(() {
       isLoading = true;
     });
-    await DBProvider.db.deleteAllUsuario();
+    await DBProvider.db.deleteAllEmployees();
 
     // wait for 1 second to simulate loading of data
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
 
     setState(() {
       isLoading = false;
     });
 
-    print('All usuarios deleted');
+    print('All employees deleted');
   }
 
   _buildEmployeeListView() {
     return FutureBuilder(
-      future: DBProvider.db.getAllUsuario(),
+      future: DBProvider.db.getAllEmployees(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (!snapshot.hasData) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Center(
-                child: CircularProgressIndicator(),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Text('Carregando dados...'),
-            ],
+          return Center(
+            child: CircularProgressIndicator(),
           );
         } else {
           return ListView.separated(
@@ -122,8 +104,9 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                   "${index + 1}",
                   style: TextStyle(fontSize: 20.0),
                 ),
-                title: Text("Name: ${snapshot.data[index].no_usuario} "),
-                subtitle: Text('EMAIL: ${snapshot.data[index].co_usuario}'),
+                title: Text(
+                    "Name: ${snapshot.data[index].firstName} ${snapshot.data[index].lastName} "),
+                subtitle: Text('EMAIL: ${snapshot.data[index].email}'),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
