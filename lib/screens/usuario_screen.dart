@@ -15,22 +15,17 @@ class UsuarioScreen extends StatefulWidget {
 
 class _UsuarioScreenState extends State<UsuarioScreen> {
   var isLoading = false;
-
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Api to sqlite'),
+        title: Text('Usuário'),
         centerTitle: true,
         actions: <Widget>[
           Container(
             padding: EdgeInsets.only(right: 10.0),
-            child: IconButton(
-              icon: Icon(Icons.settings_input_antenna),
-              onPressed: () async {
-                await _loadFromApi();
-              },
-            ),
           ),
           Container(
             padding: EdgeInsets.only(right: 10.0),
@@ -43,20 +38,13 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
           ),
         ],
       ),
-      body: isLoading
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Center(
-                  child: CircularProgressIndicator(),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Text('Carregando dados...'),
-              ],
-            )
-          : _buildEmployeeListView(),
+      body: RefreshIndicator(
+        key: _refreshIndicatorKey,
+        onRefresh: () async {
+          await _loadFromApi();
+        },
+        child: isLoading ? Container() : _buildEmployeeListView(),
+      ),
     );
   }
 
@@ -112,13 +100,24 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
         } else {
           return ListView.separated(
             separatorBuilder: (context, index) => Divider(
-              color: Colors.black12,
+              color: Colors.black26,
             ),
             itemCount: snapshot.data.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
-                leading: Image.network(
-                    "https://img.icons8.com/ios-glyphs/30/000000/user-male.png"),
+                leading: Container(
+                  height: 60,
+                  width: 60,
+                  child: snapshot.data[index].no_avatar == ''
+                      ? Image.asset(
+                          'lib/assets/userdefault.png',
+                          fit: BoxFit.fill,
+                        )
+                      : Image.network(
+                          snapshot.data[index].no_avatar,
+                          fit: BoxFit.fill,
+                        ),
+                ),
                 title: Text("Name: ${snapshot.data[index].no_usuario} "),
                 subtitle: Row(
                   children: <Widget>[
@@ -126,13 +125,11 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                     Text('Obs: ${snapshot.data[index].co_usuario}')
                   ],
                 ),
-//                onTap: () {
-//                  Navigator.of(context).push(
-//                    MaterialPageRoute(
-//                      builder: (context) => AvatarScreen(snapshot, index),
-//                    ),
-//                  );
-//                },
+                onLongPress: () {
+                  AlertDialog(
+                    title: Text('aaa'),
+                  );
+                },
               );
             },
           );

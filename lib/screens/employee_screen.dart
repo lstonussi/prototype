@@ -15,24 +15,18 @@ class EmployeeScreen extends StatefulWidget {
 }
 
 class _EmployeeScreenState extends State<EmployeeScreen> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
+
   var isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Api to sqlite'),
+        title: Text('Employee'),
         centerTitle: true,
         actions: <Widget>[
-          Container(
-            padding: EdgeInsets.only(right: 10.0),
-            child: IconButton(
-              icon: Icon(Icons.settings_input_antenna),
-              onPressed: () async {
-                await _loadFromApi();
-              },
-            ),
-          ),
           Container(
             padding: EdgeInsets.only(right: 10.0),
             child: IconButton(
@@ -44,11 +38,13 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
           ),
         ],
       ),
-      body: isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : _buildEmployeeListView(),
+      body: RefreshIndicator(
+        key: _refreshIndicatorKey,
+        onRefresh: () async {
+          await _loadFromApi();
+        },
+        child: isLoading ? Container() : _buildEmployeeListView(),
+      ),
     );
   }
 
@@ -100,9 +96,18 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
             itemCount: snapshot.data.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
-                leading: Text(
-                  "${index + 1}",
-                  style: TextStyle(fontSize: 20.0),
+                leading: Container(
+                  height: 60,
+                  width: 60,
+                  child: snapshot.data[index].avatar == ''
+                      ? Image.asset(
+                          'lib/assets/userdefault.png',
+                          fit: BoxFit.fill,
+                        )
+                      : Image.network(
+                          snapshot.data[index].avatar,
+                          fit: BoxFit.fill,
+                        ),
                 ),
                 title: Text(
                     "Name: ${snapshot.data[index].firstName} ${snapshot.data[index].lastName} "),
