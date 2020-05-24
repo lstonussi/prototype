@@ -9,8 +9,8 @@ class LoginController {
   final LoginRepository repository;
   LoginController(this.repository);
 
-  userUsuario(String value) => user.no_usuario = value;
-  userSenha(String value) => user.no_senha = value;
+  userUsuario(String value) => user.no_usuario = value.trim();
+  userSenha(String value) => user.no_senha = value.trim();
 
   Future<bool> login() async {
     if (!formKey.currentState.validate()) {

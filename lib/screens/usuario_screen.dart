@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:salesforce/providers/db_provider.dart';
 import 'package:salesforce/providers/user_provider.dart';
-import 'package:salesforce/screens/avatar_screen.dart';
 
 class UsuarioScreen extends StatefulWidget {
   UsuarioScreen({Key key, this.title}) : super(key: key);
@@ -84,7 +83,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     await DBProvider.db.deleteAllUsuario();
 
     // wait for 1 second to simulate loading of data
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(milliseconds: 1));
 
     setState(() {
       isLoading = false;
@@ -118,19 +117,22 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
             itemCount: snapshot.data.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
-                leading: Text(
-                  "${index + 1}",
-                  style: TextStyle(fontSize: 20.0),
-                ),
+                leading: Image.network(
+                    "https://img.icons8.com/ios-glyphs/30/000000/user-male.png"),
                 title: Text("Name: ${snapshot.data[index].no_usuario} "),
-                subtitle: Text('EMAIL: ${snapshot.data[index].co_usuario}'),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => AvatarScreen(snapshot, index),
-                    ),
-                  );
-                },
+                subtitle: Row(
+                  children: <Widget>[
+                    Text('CÓDIGO: ${snapshot.data[index].co_usuario}'),
+                    Text('Obs: ${snapshot.data[index].co_usuario}')
+                  ],
+                ),
+//                onTap: () {
+//                  Navigator.of(context).push(
+//                    MaterialPageRoute(
+//                      builder: (context) => AvatarScreen(snapshot, index),
+//                    ),
+//                  );
+//                },
               );
             },
           );

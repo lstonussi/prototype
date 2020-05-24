@@ -38,10 +38,14 @@ class MenuScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  height: 40,
-                  width: 100,
-                  child: RaisedButton(
-                    child: Text('Usuarios'),
+                  height: 50,
+                  width: 150,
+                  child: FlatButton(
+                    color: Colors.grey,
+                    child: Text(
+                      'Usuarios',
+                      style: TextStyle(fontSize: 18),
+                    ),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -54,10 +58,14 @@ class MenuScreen extends StatelessWidget {
                   height: 20,
                 ),
                 Container(
-                  height: 40,
-                  width: 100,
-                  child: RaisedButton(
-                    child: Text('Employee'),
+                  height: 50,
+                  width: 150,
+                  child: FlatButton(
+                    color: Colors.grey,
+                    child: Text(
+                      'Employee',
+                      style: TextStyle(fontSize: 18),
+                    ),
                     onPressed: () {
                       Navigator.push(
                         context,

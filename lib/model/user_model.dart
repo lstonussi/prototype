@@ -7,7 +7,7 @@ String usuarioToJson(List<Usuario> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Usuario {
-  String co_usuario;
+  int co_usuario;
   String no_usuario;
   String no_senha;
 

@@ -117,7 +117,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         setState(() {
                           isLoading = true;
                         });
-                        //TODO: Criar codigo para fazer o login
                         if (await controller.login()) {
                           _loginSuccess();
                         } else
