@@ -7,23 +7,19 @@ String usuarioToJson(List<Usuario> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Usuario {
-  int co_usuario;
-  String no_usuario;
-  String no_senha;
-  String no_avatar;
+  int codigo;
+  String nome;
+  String senha;
+  String avatar;
 
-  Usuario({this.co_usuario, this.no_usuario, this.no_senha, this.no_avatar});
+  Usuario({this.codigo, this.nome, this.senha, this.avatar});
 
   factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
-      co_usuario: json["co_usuario"],
-      no_usuario: json["no_usuario"],
-      no_senha: json["no_senha"],
-      no_avatar: json["no_avatar"]);
+      codigo: json["codigo"],
+      nome: json["nome"],
+      senha: json["senha"],
+      avatar: json["avatar"]);
 
-  Map<String, dynamic> toJson() => {
-        "co_usuario": co_usuario,
-        "no_usuario": no_usuario,
-        "no_senha": no_senha,
-        "no_avatar": no_avatar
-      };
+  Map<String, dynamic> toJson() =>
+      {"codigo": codigo, "nome": nome, "senha": senha, "avatar": avatar};
 }

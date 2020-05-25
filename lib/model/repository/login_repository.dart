@@ -5,6 +5,6 @@ class LoginRepository {
   Future<bool> doLogin(Usuario model) async {
     //Conexão API,BD
     await Future.delayed(Duration(milliseconds: 1));
-    return model.no_usuario == 'a' && model.no_senha == 'a';
+    return model.nome == 'a' && model.senha == 'a';
   }
 }

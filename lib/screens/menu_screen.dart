@@ -1,8 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:salesforce/screens/employee_screen.dart';
-import 'package:salesforce/screens/usuario_screen.dart';
+import 'package:salesforce/providers/categoria_provider.dart';
+import 'package:salesforce/providers/db_provider.dart';
+import 'package:salesforce/widgets/list_screen.dart';
 
 class MenuScreen extends StatelessWidget {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
+
   @override
   Widget build(BuildContext context) {
     Future<bool> _onWillPop() async {
@@ -31,54 +36,61 @@ class MenuScreen extends StatelessWidget {
       child: new Scaffold(
         appBar: new AppBar(
           title: new Text("Menu"),
+          centerTitle: true,
         ),
-        body: new Center(
-          child: Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  height: 50,
-                  width: 150,
-                  child: FlatButton(
-                    color: Colors.grey,
-                    child: Text(
-                      'Usuarios',
-                      style: TextStyle(fontSize: 18),
+        body: FutureBuilder(
+            future: DBProvider.db.getAllCategorias(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (!snapshot.hasData)
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              else {
+                return Padding(
+                  padding: EdgeInsets.all(50),
+                  child: ListView.separated(
+                    separatorBuilder: (context, index) => Divider(
+                      color: Colors.black26,
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => UsuarioScreen()),
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ListTile(
+                        leading: Container(
+                          height: 60,
+                          width: 60,
+                          child: snapshot.data[index].imagem == ''
+                              ? Image.asset(
+                                  'lib/assets/userdefault.png',
+                                  fit: BoxFit.fill,
+                                )
+                              : Image.network(
+                                  snapshot.data[index].imagem,
+                                  fit: BoxFit.fill,
+                                ),
+                        ),
+                        title: Text(snapshot.data[index].nome),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ListScreen(snapshot, index),
+                            ),
+                          );
+                        },
                       );
                     },
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  height: 50,
-                  width: 150,
-                  child: FlatButton(
-                    color: Colors.grey,
-                    child: Text(
-                      'Employee',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => EmployeeScreen()),
-                      );
-                    },
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
+                );
+              }
+            }),
       ),
     );
   }
+}
+
+_loadFromApi() async {
+  var apiProvider = CategoriaApiProvider();
+  await apiProvider.getAllCategorias();
+
+  // wait for 2 seconds to simulate loading of data
+  await Future.delayed(const Duration(seconds: 2));
 }

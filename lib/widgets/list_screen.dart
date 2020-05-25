@@ -1,40 +1,40 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:salesforce/providers/db_provider.dart';
 import 'package:salesforce/providers/user_provider.dart';
 
-class UsuarioScreen extends StatefulWidget {
-  UsuarioScreen({Key key, this.title}) : super(key: key);
+class ListScreen extends StatefulWidget {
+  final AsyncSnapshot snapshot;
 
-  final String title;
+  var index;
+  ListScreen(this.snapshot, this.index);
 
   @override
-  State<StatefulWidget> createState() => new _UsuarioScreenState();
+  State<StatefulWidget> createState() => new _ListScreenState(snapshot, index);
 }
 
-class _UsuarioScreenState extends State<UsuarioScreen> {
+class _ListScreenState extends State<ListScreen> {
   var isLoading = false;
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
+
+  final snapshot;
+
+  var index;
+
+  _ListScreenState(this.snapshot, this.index);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Usuário'),
+        title: Text(snapshot.data[index].nome),
         centerTitle: true,
         actions: <Widget>[
           Container(
             padding: EdgeInsets.only(right: 10.0),
-          ),
-          Container(
-            padding: EdgeInsets.only(right: 10.0),
-            child: IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () async {
-                await _deleteData();
-              },
-            ),
           ),
         ],
       ),
@@ -43,7 +43,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
         onRefresh: () async {
           await _loadFromApi();
         },
-        child: isLoading ? Container() : _buildEmployeeListView(),
+        child: isLoading ? Container() : _buildListView(),
       ),
     );
   }
@@ -80,7 +80,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     print('All usuarios deleted');
   }
 
-  _buildEmployeeListView() {
+  _buildListView() {
     return FutureBuilder(
       future: DBProvider.db.getAllUsuario(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -108,22 +108,22 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                 leading: Container(
                   height: 60,
                   width: 60,
-                  child: snapshot.data[index].no_avatar == ''
+                  child: snapshot.data[index].avatar == ''
                       ? Image.asset(
                           'lib/assets/userdefault.png',
                           fit: BoxFit.fill,
                         )
                       : Image.network(
-                          snapshot.data[index].no_avatar,
+                          snapshot.data[index].avatar,
                           fit: BoxFit.fill,
                         ),
                 ),
-                title: Text("Name: ${snapshot.data[index].no_usuario} "),
+                title: Text("Name: ${snapshot.data[index].nome} "),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('CÓDIGO: ${snapshot.data[index].co_usuario}'),
-                    Text('OBS: ${snapshot.data[index].no_usuario}')
+                    Text('CÓDIGO: ${snapshot.data[index].codigo}'),
+                    Text('OBS: ${snapshot.data[index].nome}')
                   ],
                 ),
                 onLongPress: () {

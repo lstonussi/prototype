@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:salesforce/model/categoria_model.dart';
 import 'package:salesforce/model/employee_model.dart';
 import 'package:salesforce/model/user_model.dart';
 import 'package:sqflite/sqflite.dart';
@@ -39,9 +40,16 @@ class DBProvider {
           ')');
 
       await db.execute('CREATE TABLE usuario('
-          'co_usuario INTEGER PRIMARY KEY,'
-          'no_usuario varchar(100),'
-          'no_senha varchar(50)'
+          'codigo INTEGER PRIMARY KEY,'
+          'nome varchar(100),'
+          'senha varchar(50),'
+          'avatar TEXT'
+          ')');
+
+      await db.execute('CREATE TABLE categoria('
+          'codigo INTEGER PRIMARY KEY,'
+          'nome varchar(100),'
+          'imagem TEXT'
           ')');
     });
   }
@@ -57,8 +65,17 @@ class DBProvider {
 
   // Insert usuario on database
   createUsuario(Usuario newUsuario) async {
+    print('Inserindo Usuarios');
     final db = await database;
     final res = await db.insert('usuario', newUsuario.toJson());
+
+    return res;
+  }
+
+  createCategoria(Categoria newCategoria) async {
+    await deleteAllCategoria();
+    final db = await database;
+    final res = await db.insert('categoria', newCategoria.toJson());
 
     return res;
   }
@@ -68,6 +85,14 @@ class DBProvider {
     print('Deletando Employees');
     final db = await database;
     final res = await db.rawDelete('DELETE FROM Employee');
+
+    return res;
+  }
+
+  Future<int> deleteAllCategoria() async {
+    print('Deletando Categoria');
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM categoria');
 
     return res;
   }
@@ -99,6 +124,17 @@ class DBProvider {
 
     List<Usuario> list =
         res.isNotEmpty ? res.map((c) => Usuario.fromJson(c)).toList() : [];
+
+    return list;
+  }
+
+  Future<List<Categoria>> getAllCategorias() async {
+    print('Get Categoria');
+    final db = await database;
+    final res = await db.rawQuery("SELECT * FROM CATEGORIA");
+
+    List<Categoria> list =
+        res.isNotEmpty ? res.map((c) => Categoria.fromJson(c)).toList() : [];
 
     return list;
   }
