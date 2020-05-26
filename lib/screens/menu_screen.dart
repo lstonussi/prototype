@@ -1,15 +1,89 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:salesforce/providers/categoria_provider.dart';
-import 'package:salesforce/providers/db_provider.dart';
-import 'package:salesforce/widgets/list_screen.dart';
+import 'package:salesforce/screens/cliente_screen.dart';
+import 'package:salesforce/screens/employee_screen.dart';
+import 'package:salesforce/screens/pedido_screen.dart';
+import 'package:salesforce/screens/produto_screen.dart';
 
 class MenuScreen extends StatelessWidget {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
 
+  final String urlPedido =
+      'https://2.bp.blogspot.com/-01-TGLQ52Jw/VeUAfiPpndI/AAAAAAAABrU/Q2Mk4waW8NU/s1600/pedidos.png';
+  final String urlCliente =
+      'https://www.beijaflorerp.com.br/Content/img/controleUser/controle-de-usuarios.png';
+  final String urlProduto =
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRmL62i1r20txk1QPjTCh6_-k0TvQ0spAhrTVJns1LDelUk6dA5&usqp=CAU';
+  final String urlSincronizacao =
+      'https://img2.gratispng.com/20180320/ezq/kisspng-blue-area-trademark-symbol-sign-sync-5ab0d70dd6d274.4635034015215388298799.jpg';
+
   @override
   Widget build(BuildContext context) {
+    Widget _buildButton(String url, String nameButton, int index) {
+      return RaisedButton(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                  height: 80,
+                  width: 80,
+                  child: Image.network(url),
+                ),
+                Text(
+                  nameButton,
+                  style: TextStyle(fontSize: 25),
+                )
+              ],
+            )
+          ],
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) {
+              switch (index) {
+                case 0:
+                  {
+                    return UsuarioScreen();
+                  }
+                  break;
+                case 1:
+                  {
+                    return PedidoScreen();
+                  }
+                  break;
+                case 2:
+                  {
+                    return ProdutoScreen();
+                  }
+                case 3:
+                  {
+                    return EmployeeScreen();
+                  }
+                  break;
+                case 4:
+                  {
+                    return Container();
+                  }
+                  break;
+                default:
+                  {
+                    return MenuScreen();
+                  }
+                  break;
+              }
+            }),
+          );
+        },
+      );
+    }
+
     Future<bool> _onWillPop() async {
       return (await showDialog(
             context: context,
@@ -35,53 +109,39 @@ class MenuScreen extends StatelessWidget {
       onWillPop: _onWillPop,
       child: new Scaffold(
         appBar: new AppBar(
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () {
+                _loadFromApi();
+              },
+            )
+          ],
           title: new Text("Menu"),
           centerTitle: true,
         ),
-        body: FutureBuilder(
-            future: DBProvider.db.getAllCategorias(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (!snapshot.hasData)
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              else {
-                return Padding(
-                  padding: EdgeInsets.all(50),
-                  child: ListView.separated(
-                    separatorBuilder: (context, index) => Divider(
-                      color: Colors.black26,
-                    ),
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        leading: Container(
-                          height: 60,
-                          width: 60,
-                          child: snapshot.data[index].imagem == ''
-                              ? Image.asset(
-                                  'lib/assets/userdefault.png',
-                                  fit: BoxFit.fill,
-                                )
-                              : Image.network(
-                                  snapshot.data[index].imagem,
-                                  fit: BoxFit.fill,
-                                ),
-                        ),
-                        title: Text(snapshot.data[index].nome),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => ListScreen(snapshot, index),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                );
-              }
-            }),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _buildButton(urlCliente, 'Clientes', 0),
+            SizedBox(
+              height: 16,
+            ),
+            _buildButton(urlPedido, 'Pedidos', 1),
+            SizedBox(
+              height: 16,
+            ),
+            _buildButton(urlProduto, 'Produtos', 2),
+            SizedBox(
+              height: 16,
+            ),
+            _buildButton(urlProduto, 'Employee', 3),
+            SizedBox(
+              height: 16,
+            ),
+            _buildButton(urlSincronizacao, 'Sincronizar', 4),
+          ],
+        ),
       ),
     );
   }

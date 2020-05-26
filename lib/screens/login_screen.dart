@@ -3,8 +3,6 @@ import 'package:salesforce/controller/login_controller.dart';
 import 'package:salesforce/model/repository/login_repository.dart';
 import 'package:salesforce/screens/menu_screen.dart';
 
-import 'menu_screen.dart';
-
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();

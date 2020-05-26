@@ -5,10 +5,6 @@ import 'package:salesforce/providers/db_provider.dart';
 import 'package:salesforce/providers/user_provider.dart';
 
 class UsuarioScreen extends StatefulWidget {
-  UsuarioScreen({Key key, this.title}) : super(key: key);
-
-  final String title;
-
   @override
   State<StatefulWidget> createState() => new _UsuarioScreenState();
 }
@@ -17,6 +13,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   var isLoading = false;
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +40,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
         onRefresh: () async {
           await _loadFromApi();
         },
-        child: isLoading ? Container() : _buildEmployeeListView(),
+        child: isLoading ? Container() : _buildListView(),
       ),
     );
   }
@@ -57,7 +54,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     await apiProvider.getAllUsuarios();
 
     // wait for 2 seconds to simulate loading of data
-    await Future.delayed(const Duration(seconds: 3));
+    //await Future.delayed(const Duration(milliseconds: 1));
 
     setState(() {
       isLoading = false;
@@ -80,7 +77,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     print('All usuarios deleted');
   }
 
-  _buildEmployeeListView() {
+  _buildListView() {
     return FutureBuilder(
       future: DBProvider.db.getAllUsuario(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -108,22 +105,21 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                 leading: Container(
                   height: 60,
                   width: 60,
-                  child: snapshot.data[index].no_avatar == ''
+                  child: snapshot.data[index].avatar == ''
                       ? Image.asset(
                           'lib/assets/userdefault.png',
                           fit: BoxFit.fill,
                         )
                       : Image.network(
-                          snapshot.data[index].no_avatar,
+                          snapshot.data[index].avatar,
                           fit: BoxFit.fill,
                         ),
                 ),
-                title: Text("Name: ${snapshot.data[index].no_usuario} "),
+                title: Text("Name: ${snapshot.data[index].nome} "),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('CÓDIGO: ${snapshot.data[index].co_usuario}'),
-                    Text('OBS: ${snapshot.data[index].no_usuario}')
+                    Text('CÓDIGO: ${snapshot.data[index].codigo}')
                   ],
                 ),
                 onLongPress: () {
