@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:salesforce/model/categoria_model.dart';
+import 'package:salesforce/model/category_model.dart';
 import 'package:salesforce/model/employee_model.dart';
+import 'package:salesforce/model/product_model.dart';
 import 'package:salesforce/model/user_model.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -28,7 +29,7 @@ class DBProvider {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentsDirectory.path, 'salesforce.db');
 
-    return await openDatabase(path, version: 1, onOpen: (db) {},
+    return await openDatabase(path, version: 2, onOpen: (db) {},
         onCreate: (Database db, int version) async {
       print('Criando tabelas');
       await db.execute('CREATE TABLE Employee('
@@ -51,6 +52,15 @@ class DBProvider {
           'nome varchar(100),'
           'imagem TEXT'
           ')');
+
+      await db.execute('CREATE TABLE produto('
+          'codigo INTEGER PRIMARY KEY,'
+          'nome varchar(100),'
+          'codigoProduto TEXT,'
+          'descricao TEXT,'
+          'preco double,'
+          'imagem TEXT'
+          ')');
     });
   }
 
@@ -65,7 +75,7 @@ class DBProvider {
 
   // Insert usuario on database
   createUsuario(Usuario newUsuario) async {
-    print('Inserindo Usuarios');
+    await deleteAllUsuario();
     final db = await database;
     final res = await db.insert('usuario', newUsuario.toJson());
 
@@ -73,9 +83,16 @@ class DBProvider {
   }
 
   createCategoria(Categoria newCategoria) async {
-    await deleteAllCategoria();
     final db = await database;
     final res = await db.insert('categoria', newCategoria.toJson());
+
+    return res;
+  }
+
+  createProduto(Produto newProduto) async {
+    await deleteAllProduto();
+    final db = await database;
+    final res = await db.insert('produto', newProduto.toJson());
 
     return res;
   }
@@ -93,6 +110,14 @@ class DBProvider {
     print('Deletando Categoria');
     final db = await database;
     final res = await db.rawDelete('DELETE FROM categoria');
+
+    return res;
+  }
+
+  Future<int> deleteAllProduto() async {
+    print('Deletando Produtos');
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM produto');
 
     return res;
   }
@@ -135,6 +160,17 @@ class DBProvider {
 
     List<Categoria> list =
         res.isNotEmpty ? res.map((c) => Categoria.fromJson(c)).toList() : [];
+
+    return list;
+  }
+
+  Future<List<Produto>> getAllProdutos() async {
+    print('Get Produto');
+    final db = await database;
+    final res = await db.rawQuery("SELECT * FROM PRODUTO");
+
+    List<Produto> list =
+        res.isNotEmpty ? res.map((c) => Produto.fromJson(c)).toList() : [];
 
     return list;
   }

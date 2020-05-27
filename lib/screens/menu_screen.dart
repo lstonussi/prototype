@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:salesforce/providers/categoria_provider.dart';
+import 'package:salesforce/providers/product_provider.dart';
+import 'package:salesforce/providers/user_provider.dart';
 import 'package:salesforce/screens/cliente_screen.dart';
-import 'package:salesforce/screens/employee_screen.dart';
 import 'package:salesforce/screens/pedido_screen.dart';
 import 'package:salesforce/screens/produto_screen.dart';
 
@@ -11,13 +11,15 @@ class MenuScreen extends StatelessWidget {
       new GlobalKey<RefreshIndicatorState>();
 
   final String urlPedido =
-      'https://2.bp.blogspot.com/-01-TGLQ52Jw/VeUAfiPpndI/AAAAAAAABrU/Q2Mk4waW8NU/s1600/pedidos.png';
+      'https://img.icons8.com/cotton/64/000000/purchase-order.png';
   final String urlCliente =
       'https://www.beijaflorerp.com.br/Content/img/controleUser/controle-de-usuarios.png';
   final String urlProduto =
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRmL62i1r20txk1QPjTCh6_-k0TvQ0spAhrTVJns1LDelUk6dA5&usqp=CAU';
+      'https://img.icons8.com/color/48/000000/move-by-trolley.png';
+  final String urlDashboard =
+      'https://img.icons8.com/fluent/48/000000/combo-chart.png';
   final String urlSincronizacao =
-      'https://img2.gratispng.com/20180320/ezq/kisspng-blue-area-trademark-symbol-sign-sync-5ab0d70dd6d274.4635034015215388298799.jpg';
+      'https://img.icons8.com/fluent/48/000000/cloud-sync--v1.png';
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +66,7 @@ class MenuScreen extends StatelessWidget {
                   }
                 case 3:
                   {
-                    return EmployeeScreen();
+                    return Container();
                   }
                   break;
                 case 4:
@@ -135,11 +137,7 @@ class MenuScreen extends StatelessWidget {
             SizedBox(
               height: 16,
             ),
-            _buildButton(urlProduto, 'Employee', 3),
-            SizedBox(
-              height: 16,
-            ),
-            _buildButton(urlSincronizacao, 'Sincronizar', 4),
+            _buildButton(urlDashboard, 'Dashboard', 4),
           ],
         ),
       ),
@@ -148,8 +146,10 @@ class MenuScreen extends StatelessWidget {
 }
 
 _loadFromApi() async {
-  var apiProvider = CategoriaApiProvider();
-  await apiProvider.getAllCategorias();
+  var apiProduto = ProdutoApiProvider();
+  var apiUsuario = UsuarioApiProvider();
+  await apiUsuario.getAllUsuarios();
+  await apiProduto.getAllProdutos();
 
   // wait for 2 seconds to simulate loading of data
   await Future.delayed(const Duration(seconds: 2));

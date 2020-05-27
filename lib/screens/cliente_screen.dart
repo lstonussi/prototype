@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:salesforce/providers/db_provider.dart';
-import 'package:salesforce/providers/user_provider.dart';
 
 class UsuarioScreen extends StatefulWidget {
   @override
@@ -35,31 +34,25 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
           ),
         ],
       ),
-      body: RefreshIndicator(
-        key: _refreshIndicatorKey,
-        onRefresh: () async {
-          await _loadFromApi();
-        },
-        child: isLoading ? Container() : _buildListView(),
-      ),
+      body: isLoading ? Container() : _buildListView(),
     );
   }
 
-  _loadFromApi() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    var apiProvider = UsuarioApiProvider();
-    await apiProvider.getAllUsuarios();
-
-    // wait for 2 seconds to simulate loading of data
-    //await Future.delayed(const Duration(milliseconds: 1));
-
-    setState(() {
-      isLoading = false;
-    });
-  }
+//  _loadFromApi() async {
+//    setState(() {
+//      isLoading = true;
+//    });
+//
+//    var apiProvider = UsuarioApiProvider();
+//    await apiProvider.getAllUsuarios();
+//
+//    // wait for 2 seconds to simulate loading of data
+//    //await Future.delayed(const Duration(milliseconds: 1));
+//
+//    setState(() {
+//      isLoading = false;
+//    });
+//  }
 
   _deleteData() async {
     setState(() {

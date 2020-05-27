@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:salesforce/model/categoria_model.dart';
+import 'package:salesforce/model/category_model.dart';
 import 'package:salesforce/model/user_model.dart';
 
 import 'db_provider.dart';
