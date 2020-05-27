@@ -61,6 +61,13 @@ class DBProvider {
           'preco double,'
           'imagem TEXT'
           ')');
+
+      await db.execute('CREATE TABLE cliente('
+          'codigo INTEGER PRIMARY KEY,'
+          'nome varchar(100),'
+          'senha varchar(50),'
+          'avatar TEXT'
+          ')');
     });
   }
 
@@ -78,6 +85,14 @@ class DBProvider {
     await deleteAllUsuario();
     final db = await database;
     final res = await db.insert('usuario', newUsuario.toJson());
+
+    return res;
+  }
+
+  createCliente(Usuario newUsuario) async {
+    await deleteAllCliente();
+    final db = await database;
+    final res = await db.insert('cliente', newUsuario.toJson());
 
     return res;
   }
@@ -118,6 +133,14 @@ class DBProvider {
     print('Deletando Produtos');
     final db = await database;
     final res = await db.rawDelete('DELETE FROM produto');
+
+    return res;
+  }
+
+  Future<int> deleteAllCliente() async {
+    print('Deletando Clientes');
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM cliente');
 
     return res;
   }
