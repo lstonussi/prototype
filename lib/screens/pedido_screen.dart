@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:salesforce/model/order_model.dart';
 
 class PedidoScreen extends StatefulWidget {
   @override
@@ -45,7 +46,7 @@ class _PedidoScreenState extends State<PedidoScreen> {
                       fit: BoxFit.fill,
                     ),
                   ),
-                  title: Text("Name: ${snapshot.data[index].codigo} "),
+                  title: Text(snapshot.data.codigo),
                   onLongPress: () {
                     //TODO: Exibir popmenu
                   },
@@ -59,11 +60,11 @@ class _PedidoScreenState extends State<PedidoScreen> {
   }
 }
 
-Future<List> getAllPedidos() async {
+Future<List<Pedido>> getAllPedidos() async {
   var url = "https://my-json-server.typicode.com/lstonussi/fakeapi/pedidos";
   Response response = await Dio().get(url);
 
   return (response.data as List).map((pedido) {
-    print(pedido.data.codigo);
+    Pedido.fromJson(pedido);
   }).toList();
 }

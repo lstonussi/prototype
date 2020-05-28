@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:salesforce/model/client_model.dart';
-
 List<Pedido> orderFromJson(String str) =>
     List<Pedido>.from(json.decode(str).map((x) => Pedido.fromJson(x)));
 
@@ -11,7 +9,7 @@ String orderToJson(List<Pedido> data) =>
 class Pedido {
   int codigo;
   String codigoExterno;
-  Cliente cliente;
+  int cliente;
   double valorBruto;
   double valorLiquido;
 
