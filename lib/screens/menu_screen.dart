@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:salesforce/providers/client_provider.dart';
+import 'package:salesforce/providers/db_provider.dart';
+import 'package:salesforce/providers/order_provider.dart';
 import 'package:salesforce/providers/product_provider.dart';
-import 'package:salesforce/providers/user_provider.dart';
 import 'package:salesforce/screens/cliente_screen.dart';
 import 'package:salesforce/screens/pedido_screen.dart';
 import 'package:salesforce/screens/produto_screen.dart';
@@ -147,9 +149,13 @@ class MenuScreen extends StatelessWidget {
 
 _loadFromApi() async {
   var apiProduto = ProdutoApiProvider();
-  var apiUsuario = UsuarioApiProvider();
-  await apiUsuario.getAllUsuarios();
+  var apiCliente = ClienteApiProvider();
+  var apiPedido = PedidoApiProvider();
+  await DBProvider.db.deleteAllCliente();
+  await DBProvider.db.deleteAllProduto();
+  await apiCliente.getAllClientes();
   await apiProduto.getAllProdutos();
+  await apiPedido.getAllPedidos();
 
   // wait for 2 seconds to simulate loading of data
   await Future.delayed(const Duration(seconds: 2));

@@ -1,10 +1,4 @@
-import 'dart:convert';
-
-List<Pedido> orderFromJson(String str) =>
-    List<Pedido>.from(json.decode(str).map((x) => Pedido.fromJson(x)));
-
-String orderToJson(List<Pedido> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+import 'itemOrder_model.dart';
 
 class Pedido {
   int codigo;
@@ -12,26 +6,40 @@ class Pedido {
   int cliente;
   double valorBruto;
   double valorLiquido;
+  List<ItemPedido> itemPedido;
 
   Pedido(
       {this.codigo,
       this.codigoExterno,
       this.cliente,
       this.valorBruto,
-      this.valorLiquido});
+      this.valorLiquido,
+      this.itemPedido});
 
-  factory Pedido.fromJson(Map<dynamic, dynamic> json) => Pedido(
-      codigo: json["codigo"],
-      codigoExterno: json["codigoExterno"],
-      cliente: json["cliente"],
-      valorBruto: json["valorLiquido"],
-      valorLiquido: json["valorLiquido"]);
+  Pedido.fromJson(Map<String, dynamic> json) {
+    codigo = json['codigo'];
+    codigoExterno = json['codigoExterno'];
+    cliente = json['cliente'];
+    valorBruto = json['valorBruto'];
+    valorLiquido = json['valorLiquido'];
+    if (json['itemPedido'] != null) {
+      itemPedido = new List<ItemPedido>();
+      json['itemPedido'].forEach((v) {
+        itemPedido.add(new ItemPedido.fromJson(v));
+      });
+    }
+  }
 
-  Map<String, dynamic> toJson() => {
-        "codigo": codigo,
-        "codigoExterno": codigoExterno,
-        "cliente": cliente,
-        "valorBruto": valorBruto,
-        "valorLiquido": valorLiquido
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['codigo'] = this.codigo;
+    data['codigoExterno'] = this.codigoExterno;
+    data['cliente'] = this.cliente;
+    data['valorBruto'] = this.valorBruto;
+    data['valorLiquido'] = this.valorLiquido;
+    if (this.itemPedido != null) {
+      data['itemPedido'] = this.itemPedido.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
 }

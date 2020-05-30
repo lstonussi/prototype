@@ -6,7 +6,7 @@ import 'db_provider.dart';
 
 class ClienteApiProvider {
   Future<List<Cliente>> getAllClientes() async {
-    var url = "https://my-json-server.typicode.com/lstonussi/fakeapi/usuarios";
+    var url = "https://my-json-server.typicode.com/lstonussi/fakeapi/clientes";
     Response response = await Dio().get(url);
 
     return (response.data as List).map((cliente) {

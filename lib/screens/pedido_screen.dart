@@ -1,6 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:salesforce/model/order_model.dart';
+import 'package:salesforce/providers/db_provider.dart';
 
 class PedidoScreen extends StatefulWidget {
   @override
@@ -15,7 +14,7 @@ class _PedidoScreenState extends State<PedidoScreen> {
         title: Text('Pedidos'),
       ),
       body: FutureBuilder(
-        future: getAllPedidos(),
+        future: DBProvider.db.getAllPedidos(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData) {
             return Column(
@@ -58,13 +57,4 @@ class _PedidoScreenState extends State<PedidoScreen> {
       ),
     );
   }
-}
-
-Future<List<Pedido>> getAllPedidos() async {
-  var url = "https://my-json-server.typicode.com/lstonussi/fakeapi/pedidos";
-  Response response = await Dio().get(url);
-
-  return (response.data as List).map((pedido) {
-    Pedido.fromJson(pedido);
-  }).toList();
 }

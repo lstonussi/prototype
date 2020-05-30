@@ -17,22 +17,8 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Usuário'),
+        title: Text('Clientes'),
         centerTitle: true,
-        actions: <Widget>[
-          Container(
-            padding: EdgeInsets.only(right: 10.0),
-          ),
-          Container(
-            padding: EdgeInsets.only(right: 10.0),
-            child: IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () async {
-                await _deleteData();
-              },
-            ),
-          ),
-        ],
       ),
       body: isLoading ? Container() : _buildListView(),
     );
@@ -58,7 +44,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     setState(() {
       isLoading = true;
     });
-    await DBProvider.db.deleteAllUsuario();
+    await DBProvider.db.deleteAllCliente();
 
     // wait for 1 second to simulate loading of data
     await Future.delayed(const Duration(milliseconds: 1));
@@ -72,7 +58,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
 
   _buildListView() {
     return FutureBuilder(
-      future: DBProvider.db.getAllUsuario(),
+      future: DBProvider.db.getAllClientes(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (!snapshot.hasData) {
           return Column(
