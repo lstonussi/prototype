@@ -103,7 +103,6 @@ class DBProvider {
     await deleteAllUsuario();
     final db = await database;
     final res = await db.insert('usuario', newUsuario.toJson());
-
     return res;
   }
 
@@ -220,7 +219,6 @@ class DBProvider {
 
     List<Usuario> list =
         res.isNotEmpty ? res.map((c) => Usuario.fromJson(c)).toList() : [];
-
     return list;
   }
 

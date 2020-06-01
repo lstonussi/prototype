@@ -6,9 +6,10 @@ import 'package:salesforce/providers/user_provider.dart';
 class LoginRepository {
   Future<bool> doLogin(Usuario model) async {
     var apiUsuario = UsuarioApiProvider();
-    await apiUsuario.getAllUsuarios();
-    List<Usuario> list = await DBProvider.db.getAllUsuario();
-    print(list.contains('lucas'));
+    Future<List<Usuario>> list = DBProvider.db.getAllUsuario();
+    //List<Usuario> list = await apiUsuario.getAllUsuarios();
+
     return model.nome == 'a' && model.senha == 'a';
   }
 }
+//4.1.x

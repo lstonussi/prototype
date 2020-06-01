@@ -4,6 +4,7 @@ import 'package:salesforce/providers/client_provider.dart';
 import 'package:salesforce/providers/db_provider.dart';
 import 'package:salesforce/providers/order_provider.dart';
 import 'package:salesforce/providers/product_provider.dart';
+import 'package:salesforce/providers/user_provider.dart';
 import 'package:salesforce/screens/cliente_screen.dart';
 import 'package:salesforce/screens/pedido_screen.dart';
 import 'package:salesforce/screens/produto_screen.dart';
@@ -151,11 +152,13 @@ _loadFromApi() async {
   var apiProduto = ProdutoApiProvider();
   var apiCliente = ClienteApiProvider();
   var apiPedido = PedidoApiProvider();
+  var apiUsuario = UsuarioApiProvider();
   await DBProvider.db.deleteAllCliente();
   await DBProvider.db.deleteAllProduto();
   await apiCliente.getAllClientes();
   await apiProduto.getAllProdutos();
   await apiPedido.getAllPedidos();
+  await apiUsuario.getAllUsuarios();
 
   // wait for 2 seconds to simulate loading of data
   await Future.delayed(const Duration(seconds: 2));
