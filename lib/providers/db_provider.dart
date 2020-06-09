@@ -100,7 +100,8 @@ class DBProvider {
 
   // Insert usuario on database
   createUsuario(Usuario newUsuario) async {
-    //await deleteAllUsuario();
+    await deleteAllUsuario();
+    print('Inserindo Usuarios');
     final db = await database;
     final res = await db.insert('usuario', newUsuario.toJson());
     return res;
