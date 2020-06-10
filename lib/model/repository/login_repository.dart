@@ -1,3 +1,4 @@
+import 'package:salesforce/model/session_model.dart';
 import 'package:salesforce/model/user_model.dart';
 import 'package:salesforce/providers/db_provider.dart';
 
@@ -8,8 +9,14 @@ class LoginRepository {
 //    List<Usuario> list = await apiUsuario.getAllUsuarios();
 //    list.map((user) => print(list[0].nome)).toList();
     List<Usuario> list = await DBProvider.db.getAllUsuario();
-    list.
-    return model.nome == 'a' && model.senha == 'a';
+    bool login = false;
+    list.map((l) {
+      if (l.nome == model.nome && l.senha == model.senha) {
+        login = true;
+        Session(l.nome, l.codigo);
+      }
+    }).toList();
+    return login;
   }
 }
 //4.1.x

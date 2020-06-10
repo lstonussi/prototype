@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:salesforce/model/session_model.dart';
 import 'package:salesforce/providers/client_provider.dart';
 import 'package:salesforce/providers/db_provider.dart';
 import 'package:salesforce/providers/order_provider.dart';
@@ -23,6 +24,11 @@ class MenuScreen extends StatelessWidget {
       'https://img.icons8.com/fluent/48/000000/combo-chart.png';
   final String urlSincronizacao =
       'https://img.icons8.com/fluent/48/000000/cloud-sync--v1.png';
+
+  String getSession() {
+    Session s;
+    return 's.Usuario';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +128,7 @@ class MenuScreen extends StatelessWidget {
               },
             )
           ],
-          title: new Text("Menu"),
+          title: new Text('Menu'),
           centerTitle: true,
         ),
         body: Column(
@@ -159,7 +165,4 @@ _loadFromApi() async {
   await apiProduto.getAllProdutos();
   await apiPedido.getAllPedidos();
   await apiUsuario.getAllUsuarios();
-
-  // wait for 2 seconds to simulate loading of data
-  await Future.delayed(const Duration(seconds: 2));
 }
